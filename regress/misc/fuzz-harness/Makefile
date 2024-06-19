@@ -1,17 +1,17 @@
 # NB. libssh and libopenbsd-compat should be built with the same sanitizer opts.
-CC=clang-11
-CXX=clang++-11
+CC=clang-16
+CXX=clang++-16
 FUZZ_FLAGS=-fsanitize=address,fuzzer -fno-omit-frame-pointer
-FUZZ_LIBS=-lFuzzer
+FUZZ_LIBS=-L/usr/lib/llvm-16/lib -lFuzzer
 
-CXXFLAGS=-O2 -g -Wall -Wextra -Wno-unused-parameter -I ../../.. $(FUZZ_FLAGS)
+CXXFLAGS=-O2 -g -Wall -Wextra -Wno-unused-parameter -Wno-exceptions -I ../../.. $(FUZZ_FLAGS)
 CFLAGS=$(CXXFLAGS)
 LDFLAGS=-L ../../.. -L ../../../openbsd-compat -g $(FUZZ_FLAGS)
 LIBS=-lssh -lopenbsd-compat -lmd -lcrypto -lfido2 -lcbor $(FUZZ_LIBS)
 SK_NULL_OBJS=ssh-sk-null.o
 COMMON_DEPS=../../../libssh.a
 
-TARGETS=pubkey_fuzz sig_fuzz authopt_fuzz sshsig_fuzz \
+TARGETS=pubkey_fuzz sig_fuzz authopt_fuzz authkeys_fuzz sshsig_fuzz \
 	sshsigopt_fuzz privkey_fuzz kex_fuzz agent_fuzz
 
 all: $(TARGETS)
@@ -27,6 +27,9 @@ sig_fuzz: sig_fuzz.o $(SK_NULL_OBJS) $(COMMON_DEPS)
 
 authopt_fuzz: authopt_fuzz.o $(SK_NULL_OBJS) $(COMMON_DEPS)
 	$(CXX) -o $@ authopt_fuzz.o $(SK_NULL_OBJS) ../../../auth-options.o $(LDFLAGS) $(LIBS)
+
+authkeys_fuzz: authkeys_fuzz.o $(SK_NULL_OBJS) $(COMMON_DEPS)
+	$(CXX) -o $@ authkeys_fuzz.o $(SK_NULL_OBJS) ../../../auth-options.o ../../../auth2-pubkeyfile.o $(LDFLAGS) $(LIBS)
 
 sshsig_fuzz: sshsig_fuzz.o $(SK_NULL_OBJS) $(COMMON_DEPS)
 	$(CXX) -o $@ sshsig_fuzz.o $(SK_NULL_OBJS) ../../../sshsig.o $(LDFLAGS) $(LIBS)
