@@ -1,4 +1,4 @@
-/* $OpenBSD: ssh_api.c,v 1.27 2021/04/03 06:18:41 djm Exp $ */
+/* $OpenBSD: ssh_api.c,v 1.28 2024/01/09 21:39:14 djm Exp $ */
 /*
  * Copyright (c) 2012 Markus Friedl.  All rights reserved.
  *
@@ -83,6 +83,7 @@ int
 ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 {
 	char *myproposal[PROPOSAL_MAX] = { KEX_CLIENT };
+	char *populated[PROPOSAL_MAX];
 	struct ssh *ssh;
 	char **proposal;
 	static int called;
@@ -100,10 +101,19 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 
 	/* Initialize key exchange */
 	proposal = kex_params ? kex_params->proposal : myproposal;
-	if ((r = kex_ready(ssh, proposal)) != 0) {
+	kex_proposal_populate_entries(ssh, populated,
+	    proposal[PROPOSAL_KEX_ALGS],
+	    proposal[PROPOSAL_ENC_ALGS_CTOS],
+	    proposal[PROPOSAL_MAC_ALGS_CTOS],
+	    proposal[PROPOSAL_COMP_ALGS_CTOS],
+	    proposal[PROPOSAL_SERVER_HOST_KEY_ALGS]);
+	r = kex_ready(ssh, populated);
+	kex_proposal_free_entries(populated);
+	if (r != 0) {
 		ssh_free(ssh);
 		return r;
 	}
+
 	ssh->kex->server = is_server;
 	if (is_server) {
 #ifdef WITH_OPENSSL
@@ -145,7 +155,7 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_KEM_HQC_192_SHA384] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_HQC_256_SHA512] = kex_gen_server;
 #ifdef WITH_OPENSSL
-#ifdef OPENSSL_HAS_ECC
+		#ifdef OPENSSL_HAS_ECC
 		ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_ECDH_NISTP256_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_976_AES_ECDH_NISTP384_SHA384] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_1344_AES_ECDH_NISTP521_SHA512] = kex_gen_server;
@@ -217,7 +227,7 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_KEM_HQC_192_SHA384] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_HQC_256_SHA512] = kex_gen_client;
 #ifdef WITH_OPENSSL
-#ifdef OPENSSL_HAS_ECC
+		#ifdef OPENSSL_HAS_ECC
 		ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_ECDH_NISTP256_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_976_AES_ECDH_NISTP384_SHA384] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_1344_AES_ECDH_NISTP521_SHA512] = kex_gen_client;

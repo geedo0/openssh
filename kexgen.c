@@ -545,9 +545,9 @@ out:
 	explicit_bzero(kex->sntrup761_client_key,
 	    sizeof(kex->sntrup761_client_key));
 	if (kex->oqs_client_key) {
-	  explicit_bzero(kex->oqs_client_key, kex->oqs_client_key_size);
-	  free(kex->oqs_client_key);
-	  kex->oqs_client_key = NULL;
+		explicit_bzero(kex->oqs_client_key, kex->oqs_client_key_size);
+		free(kex->oqs_client_key);
+		kex->oqs_client_key = NULL;
 	}
 	sshbuf_free(server_host_key_blob);
 	free(signature);
@@ -619,31 +619,31 @@ input_kex_gen_init(int type, u_int32_t seq, struct ssh *ssh)
 ///// OQS_TEMPLATE_FRAGMENT_ADD_INIT_SWITCH_CASES_START
 	case KEX_KEM_FRODOKEM_640_AES_SHA256:
 		r = kex_kem_frodokem_640_aes_enc(kex, client_pubkey,
-		    &server_pubkey, &shared_secret);
+										 &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_FRODOKEM_976_AES_SHA384:
 		r = kex_kem_frodokem_976_aes_enc(kex, client_pubkey,
-		    &server_pubkey, &shared_secret);
+										 &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_FRODOKEM_1344_AES_SHA512:
 		r = kex_kem_frodokem_1344_aes_enc(kex, client_pubkey,
-		    &server_pubkey, &shared_secret);
+										  &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_FRODOKEM_640_SHAKE_SHA256:
 		r = kex_kem_frodokem_640_shake_enc(kex, client_pubkey,
-		    &server_pubkey, &shared_secret);
+										   &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_FRODOKEM_976_SHAKE_SHA384:
 		r = kex_kem_frodokem_976_shake_enc(kex, client_pubkey,
-		    &server_pubkey, &shared_secret);
+										   &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_FRODOKEM_1344_SHAKE_SHA512:
 		r = kex_kem_frodokem_1344_shake_enc(kex, client_pubkey,
-		    &server_pubkey, &shared_secret);
+											&server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_KYBER_512_SHA256:
 		r = kex_kem_kyber_512_enc(kex, client_pubkey,
-		    &server_pubkey, &shared_secret);
+								  &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_KYBER_768_SHA384:
 		r = kex_kem_kyber_768_enc(kex, client_pubkey,
