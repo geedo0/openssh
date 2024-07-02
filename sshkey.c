@@ -67,6 +67,8 @@
 
 #include "openbsd-compat/openssl-compat.h"
 
+#include "oqs-utils.h"
+
 /* openssh private key file format */
 #define MARK_BEGIN		"-----BEGIN OPENSSH PRIVATE KEY-----\n"
 #define MARK_END		"-----END OPENSSH PRIVATE KEY-----\n"
@@ -131,6 +133,32 @@ extern const struct sshkey_impl sshkey_xmss_impl;
 extern const struct sshkey_impl sshkey_xmss_cert_impl;
 #endif
 
+///// OQS_TEMPLATE_FRAGMENT_EXTERN_KEY_IMPLS_START
+extern const struct sshkey_impl sshkey_falcon512_impl;
+extern const struct sshkey_impl sshkey_falcon1024_impl;
+extern const struct sshkey_impl sshkey_dilithium2_impl;
+extern const struct sshkey_impl sshkey_dilithium3_impl;
+extern const struct sshkey_impl sshkey_dilithium5_impl;
+extern const struct sshkey_impl sshkey_sphincssha2128fsimple_impl;
+extern const struct sshkey_impl sshkey_sphincssha2256fsimple_impl;
+
+#ifdef HYBRID_IMPLEMENTATION_EXISTS
+// #ifdef WITH_OPENSSL
+extern const struct sshkey_impl sshkey_rsa3072_falcon512_impl;
+extern const struct sshkey_impl sshkey_rsa3072_dilithium2_impl;
+extern const struct sshkey_impl sshkey_rsa3072_sphincssha2128fsimple_impl;
+#ifdef OPENSSL_HAS_ECC
+extern const struct sshkey_impl sshkey_ecdsanistp256_falcon512_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp521_falcon1024_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp256_dilithium2_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp384_dilithium3_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp521_dilithium5_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp256_sphincssha2128fsimple_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp521_sphincssha2256fsimple_impl;
+#endif /* OPENSSL_HAS_ECC */
+#endif /* WITH_OPENSSL */
+///// OQS_TEMPLATE_FRAGMENT_EXTERN_KEY_IMPLS_END
+
 const struct sshkey_impl * const keyimpls[] = {
 	&sshkey_ed25519_impl,
 	&sshkey_ed25519_cert_impl,
@@ -169,6 +197,30 @@ const struct sshkey_impl * const keyimpls[] = {
 	&sshkey_xmss_impl,
 	&sshkey_xmss_cert_impl,
 #endif
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_KEYTYPES_START
+	&sshkey_falcon512_impl,
+	&sshkey_falcon1024_impl,
+	&sshkey_dilithium2_impl,
+	&sshkey_dilithium3_impl,
+	&sshkey_dilithium5_impl,
+	&sshkey_sphincssha2128fsimple_impl,
+	&sshkey_sphincssha2256fsimple_impl,
+#ifdef HYBRID_IMPLEMENTATION_EXISTS
+// #ifdef WITH_OPENSSL
+	&sshkey_rsa3072_falcon512_impl,
+	&sshkey_rsa3072_dilithium2_impl,
+	&sshkey_rsa3072_sphincssha2128fsimple_impl,
+#ifdef OPENSSL_HAS_ECC
+	&sshkey_ecdsanistp256_falcon512_impl,
+	&sshkey_ecdsanistp521_falcon1024_impl,
+	&sshkey_ecdsanistp256_dilithium2_impl,
+	&sshkey_ecdsanistp384_dilithium3_impl,
+	&sshkey_ecdsanistp521_dilithium5_impl,
+	&sshkey_ecdsanistp256_sphincssha2128fsimple_impl,
+	&sshkey_ecdsanistp521_sphincssha2256fsimple_impl,
+#endif /* OPENSSL_HAS_ECC */
+#endif /* WITH_OPENSSL */
+///// OQS_TEMPLATE_FRAGMENT_DEFINE_KEYTYPES_END
 	NULL
 };
 
@@ -274,7 +326,7 @@ key_type_is_ecdsa_variant(int type)
 	case KEY_ECDSA_SK_CERT:
 		return 1;
 	}
-	return 0;
+	return oqs_utils_is_ecdsa_hybrid(type);
 }
 
 int
@@ -3317,7 +3369,9 @@ sshkey_private_to_fileblob(struct sshkey *key, struct sshbuf *blob,
 #endif /* WITH_XMSS */
 #ifdef WITH_OPENSSL
 	case KEY_ECDSA_SK:
+	CASE_KEY_HYBRID:
 #endif /* WITH_OPENSSL */
+	CASE_KEY_OQS:
 		return sshkey_private_to_blob2(key, blob, passphrase,
 		    comment, openssh_format_cipher, openssh_format_rounds);
 	default:
@@ -3575,6 +3629,8 @@ sshkey_parse_private_fileblob_type(struct sshbuf *blob, int type,
 
 	switch (type) {
 	case KEY_XMSS:
+	CASE_KEY_OQS:
+	CASE_KEY_HYBRID:
 		/* No fallback for new-format-only keys */
 		return sshkey_parse_private2(blob, type, passphrase,
 		    keyp, commentp);
