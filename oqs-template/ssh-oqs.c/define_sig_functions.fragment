@@ -29,7 +29,7 @@ int ssh_{{ symbol_base_name }}_sign(struct sshkey *key,
     if (sig == NULL) {
         return SSH_ERR_ALLOC_FAIL;
     }
-    int r = ssh_generic_sign(sig, "{{ symbol_base_name }}", key, sigp, lenp, data, datalen, compat);
+    int r = oqs_sign(sig, "{{ symbol_base_name }}", key, sigp, lenp, data, datalen, compat);
     OQS_SIG_free(sig);
     return r;
 }
@@ -47,7 +47,7 @@ int ssh_{{ symbol_base_name }}_verify(const struct sshkey *key,
     if (sig == NULL) {
         return SSH_ERR_ALLOC_FAIL;
     }
-    int r = ssh_generic_verify(sig, "{{ symbol_base_name }}", key, signature, signaturelen, data, datalen, compat);
+    int r = oqs_verify(sig, "{{ symbol_base_name }}", key, signature, signaturelen, data, datalen, compat);
     OQS_SIG_free(sig);
     return r;
 }
@@ -61,10 +61,10 @@ static const struct sshkey_impl_funcs sshkey_{{ symbol_base_name }}_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_{{ symbol_base_name }}_generate,
+  /* .generate = */ ssh_generic_generate,
   /* .copy_public = */ ssh_generic_copy_public,
-  /* .sign = */ ssh_{{ symbol_base_name }}_sign,
-  /* .verify = */ ssh_{{ symbol_base_name }}_verify,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
 };
 
 const struct sshkey_impl sshkey_{{ symbol_base_name }}_impl = {
@@ -93,10 +93,10 @@ static const struct sshkey_impl_funcs sshkey_{{ symbol_base_name }}_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_{{ symbol_base_name }}_generate,
+  /* .generate = */ ssh_generic_generate,
   /* .copy_public = */ ssh_generic_copy_public,
-  /* .sign = */ ssh_{{ symbol_base_name }}_sign,
-  /* .verify = */ ssh_{{ symbol_base_name }}_verify,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
 };
 
 const struct sshkey_impl sshkey_{{ symbol_base_name }}_impl = {
@@ -110,6 +110,7 @@ const struct sshkey_impl sshkey_{{ symbol_base_name }}_impl = {
   /* .keybits = */ 256, // TODO - What should be here?
   /* .funcs = */ &sshkey_{{ symbol_base_name }}_funcs,
 };
+// TODO - EC Version
 {%- endfor %}
 {%- endfor %}
 #endif /* WITH_OPENSSL */
