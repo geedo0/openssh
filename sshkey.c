@@ -147,13 +147,13 @@ extern const struct sshkey_impl sshkey_rsa3072_falcon512_impl;
 extern const struct sshkey_impl sshkey_rsa3072_dilithium2_impl;
 extern const struct sshkey_impl sshkey_rsa3072_sphincssha2128fsimple_impl;
 #ifdef OPENSSL_HAS_ECC
-// extern const struct sshkey_impl sshkey_ecdsanistp256_falcon512_impl;
-// extern const struct sshkey_impl sshkey_ecdsanistp521_falcon1024_impl;
-// extern const struct sshkey_impl sshkey_ecdsanistp256_dilithium2_impl;
-// extern const struct sshkey_impl sshkey_ecdsanistp384_dilithium3_impl;
-// extern const struct sshkey_impl sshkey_ecdsanistp521_dilithium5_impl;
-// extern const struct sshkey_impl sshkey_ecdsanistp256_sphincssha2128fsimple_impl;
-// extern const struct sshkey_impl sshkey_ecdsanistp521_sphincssha2256fsimple_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp256_falcon512_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp521_falcon1024_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp256_dilithium2_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp384_dilithium3_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp521_dilithium5_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp256_sphincssha2128fsimple_impl;
+extern const struct sshkey_impl sshkey_ecdsanistp521_sphincssha2256fsimple_impl;
 #endif /* OPENSSL_HAS_ECC */
 #endif /* WITH_OPENSSL */
 ///// OQS_TEMPLATE_FRAGMENT_EXTERN_KEY_IMPLS_END
@@ -209,13 +209,13 @@ const struct sshkey_impl * const keyimpls[] = {
 	&sshkey_rsa3072_dilithium2_impl,
 	&sshkey_rsa3072_sphincssha2128fsimple_impl,
 #ifdef OPENSSL_HAS_ECC
-	// &sshkey_ecdsanistp256_falcon512_impl,
-	// &sshkey_ecdsanistp521_falcon1024_impl,
-	// &sshkey_ecdsanistp256_dilithium2_impl,
-	// &sshkey_ecdsanistp384_dilithium3_impl,
-	// &sshkey_ecdsanistp521_dilithium5_impl,
-	// &sshkey_ecdsanistp256_sphincssha2128fsimple_impl,
-	// &sshkey_ecdsanistp521_sphincssha2256fsimple_impl,
+	&sshkey_ecdsanistp256_falcon512_impl,
+	&sshkey_ecdsanistp521_falcon1024_impl,
+	&sshkey_ecdsanistp256_dilithium2_impl,
+	&sshkey_ecdsanistp384_dilithium3_impl,
+	&sshkey_ecdsanistp521_dilithium5_impl,
+	&sshkey_ecdsanistp256_sphincssha2128fsimple_impl,
+	&sshkey_ecdsanistp521_sphincssha2256fsimple_impl,
 #endif /* OPENSSL_HAS_ECC */
 #endif /* WITH_OPENSSL */
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_KEYTYPES_END

@@ -61,7 +61,7 @@ static const struct sshkey_impl_funcs sshkey_{{ symbol_base_name }}_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_generic_generate,
+  /* .generate = */ ssh_{{ symbol_base_name }}_generate,
   /* .copy_public = */ ssh_generic_copy_public,
   /* .sign = */ ssh_generic_sign,
   /* .verify = */ ssh_generic_verify,
@@ -110,8 +110,40 @@ const struct sshkey_impl sshkey_{{ symbol_base_name }}_impl = {
   /* .keybits = */ 256, // TODO - What should be here?
   /* .funcs = */ &sshkey_{{ symbol_base_name }}_funcs,
 };
-// TODO - EC Version
 {%- endfor %}
 {%- endfor %}
+#ifdef OPENSSL_HAS_ECC
+{%- for sig in config['sigs'] %}
+{%- for alg in sig['mix_with'] if not alg['rsa'] %}
+{%- set symbol_base_name = alg['name']|replace('_','') + '_' + sig['name']|replace('_','') %}
+static const struct sshkey_impl_funcs sshkey_{{ symbol_base_name }}_funcs = {
+  /* .size = */ ssh_generic_size,
+  /* .alloc = */ ssh_generic_alloc,
+  /* .cleanup = */ ssh_generic_cleanup,
+  /* .equal = */ ssh_generic_equal,
+  /* .ssh_serialize_public = */ ssh_generic_serialize_public,
+  /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
+  /* .ssh_serialize_private = */ ssh_generic_serialize_private,
+  /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
+  /* .generate = */ ssh_generic_generate,
+  /* .copy_public = */ ssh_generic_copy_public,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
+};
+
+const struct sshkey_impl sshkey_{{ symbol_base_name }}_impl = {
+  /* .name = */ "ssh-{{ symbol_base_name }}",
+  /* .shortname = */ "{{ symbol_base_name|upper }}",
+  /* .sigalg = */ NULL,
+  /* .type = */ KEY_{{ sig['name']|upper }},
+  /* .nid = */ {{ alg['openssl_nid'] }},
+  /* .cert = */ 0,
+  /* .sigonly = */ 0,
+  /* .keybits = */ 256, // TODO - What should be here?
+  /* .funcs = */ &sshkey_{{ symbol_base_name }}_funcs,
+};
+{%- endfor %}
+{%- endfor %}
+#endif /* OPENSSL_HAS_ECC */
 #endif /* WITH_OPENSSL */
 

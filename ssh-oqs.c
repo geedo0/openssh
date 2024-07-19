@@ -19,6 +19,9 @@
 
 #include <sys/types.h>
 #include <limits.h>
+#ifdef WITH_OPENSSL
+#include <openssl/obj_mac.h>
+#endif
 
 #include "crypto_api.h"
 
@@ -597,7 +600,7 @@ static const struct sshkey_impl_funcs sshkey_falcon512_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_generic_generate,
+  /* .generate = */ ssh_falcon512_generate,
   /* .copy_public = */ ssh_generic_copy_public,
   /* .sign = */ ssh_generic_sign,
   /* .verify = */ ssh_generic_verify,
@@ -675,7 +678,7 @@ static const struct sshkey_impl_funcs sshkey_falcon1024_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_generic_generate,
+  /* .generate = */ ssh_falcon1024_generate,
   /* .copy_public = */ ssh_generic_copy_public,
   /* .sign = */ ssh_generic_sign,
   /* .verify = */ ssh_generic_verify,
@@ -753,7 +756,7 @@ static const struct sshkey_impl_funcs sshkey_dilithium2_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_generic_generate,
+  /* .generate = */ ssh_dilithium2_generate,
   /* .copy_public = */ ssh_generic_copy_public,
   /* .sign = */ ssh_generic_sign,
   /* .verify = */ ssh_generic_verify,
@@ -831,7 +834,7 @@ static const struct sshkey_impl_funcs sshkey_dilithium3_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_generic_generate,
+  /* .generate = */ ssh_dilithium3_generate,
   /* .copy_public = */ ssh_generic_copy_public,
   /* .sign = */ ssh_generic_sign,
   /* .verify = */ ssh_generic_verify,
@@ -909,7 +912,7 @@ static const struct sshkey_impl_funcs sshkey_dilithium5_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_generic_generate,
+  /* .generate = */ ssh_dilithium5_generate,
   /* .copy_public = */ ssh_generic_copy_public,
   /* .sign = */ ssh_generic_sign,
   /* .verify = */ ssh_generic_verify,
@@ -987,7 +990,7 @@ static const struct sshkey_impl_funcs sshkey_sphincssha2128fsimple_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_generic_generate,
+  /* .generate = */ ssh_sphincssha2128fsimple_generate,
   /* .copy_public = */ ssh_generic_copy_public,
   /* .sign = */ ssh_generic_sign,
   /* .verify = */ ssh_generic_verify,
@@ -1065,7 +1068,7 @@ static const struct sshkey_impl_funcs sshkey_sphincssha2256fsimple_funcs = {
   /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
   /* .ssh_serialize_private = */ ssh_generic_serialize_private,
   /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
-  /* .generate = */ ssh_generic_generate,
+  /* .generate = */ ssh_sphincssha2256fsimple_generate,
   /* .copy_public = */ ssh_generic_copy_public,
   /* .sign = */ ssh_generic_sign,
   /* .verify = */ ssh_generic_verify,
@@ -1110,7 +1113,6 @@ const struct sshkey_impl sshkey_rsa3072_falcon512_impl = {
   /* .keybits = */ 256, // TODO - What should be here?
   /* .funcs = */ &sshkey_rsa3072_falcon512_funcs,
 };
-// TODO - EC Version
 static const struct sshkey_impl_funcs sshkey_rsa3072_dilithium2_funcs = {
   /* .size = */ ssh_generic_size,
   /* .alloc = */ ssh_generic_alloc,
@@ -1137,7 +1139,6 @@ const struct sshkey_impl sshkey_rsa3072_dilithium2_impl = {
   /* .keybits = */ 256, // TODO - What should be here?
   /* .funcs = */ &sshkey_rsa3072_dilithium2_funcs,
 };
-// TODO - EC Version
 static const struct sshkey_impl_funcs sshkey_rsa3072_sphincssha2128fsimple_funcs = {
   /* .size = */ ssh_generic_size,
   /* .alloc = */ ssh_generic_alloc,
@@ -1164,7 +1165,190 @@ const struct sshkey_impl sshkey_rsa3072_sphincssha2128fsimple_impl = {
   /* .keybits = */ 256, // TODO - What should be here?
   /* .funcs = */ &sshkey_rsa3072_sphincssha2128fsimple_funcs,
 };
-// TODO - EC Version
+#ifdef OPENSSL_HAS_ECC
+static const struct sshkey_impl_funcs sshkey_ecdsanistp256_falcon512_funcs = {
+  /* .size = */ ssh_generic_size,
+  /* .alloc = */ ssh_generic_alloc,
+  /* .cleanup = */ ssh_generic_cleanup,
+  /* .equal = */ ssh_generic_equal,
+  /* .ssh_serialize_public = */ ssh_generic_serialize_public,
+  /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
+  /* .ssh_serialize_private = */ ssh_generic_serialize_private,
+  /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
+  /* .generate = */ ssh_generic_generate,
+  /* .copy_public = */ ssh_generic_copy_public,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
+};
+
+const struct sshkey_impl sshkey_ecdsanistp256_falcon512_impl = {
+  /* .name = */ "ssh-ecdsanistp256_falcon512",
+  /* .shortname = */ "ECDSANISTP256_FALCON512",
+  /* .sigalg = */ NULL,
+  /* .type = */ KEY_FALCON_512,
+  /* .nid = */ NID_X9_62_prime256v1,
+  /* .cert = */ 0,
+  /* .sigonly = */ 0,
+  /* .keybits = */ 256, // TODO - What should be here?
+  /* .funcs = */ &sshkey_ecdsanistp256_falcon512_funcs,
+};
+static const struct sshkey_impl_funcs sshkey_ecdsanistp521_falcon1024_funcs = {
+  /* .size = */ ssh_generic_size,
+  /* .alloc = */ ssh_generic_alloc,
+  /* .cleanup = */ ssh_generic_cleanup,
+  /* .equal = */ ssh_generic_equal,
+  /* .ssh_serialize_public = */ ssh_generic_serialize_public,
+  /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
+  /* .ssh_serialize_private = */ ssh_generic_serialize_private,
+  /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
+  /* .generate = */ ssh_generic_generate,
+  /* .copy_public = */ ssh_generic_copy_public,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
+};
+
+const struct sshkey_impl sshkey_ecdsanistp521_falcon1024_impl = {
+  /* .name = */ "ssh-ecdsanistp521_falcon1024",
+  /* .shortname = */ "ECDSANISTP521_FALCON1024",
+  /* .sigalg = */ NULL,
+  /* .type = */ KEY_FALCON_1024,
+  /* .nid = */ NID_secp521r1,
+  /* .cert = */ 0,
+  /* .sigonly = */ 0,
+  /* .keybits = */ 256, // TODO - What should be here?
+  /* .funcs = */ &sshkey_ecdsanistp521_falcon1024_funcs,
+};
+static const struct sshkey_impl_funcs sshkey_ecdsanistp256_dilithium2_funcs = {
+  /* .size = */ ssh_generic_size,
+  /* .alloc = */ ssh_generic_alloc,
+  /* .cleanup = */ ssh_generic_cleanup,
+  /* .equal = */ ssh_generic_equal,
+  /* .ssh_serialize_public = */ ssh_generic_serialize_public,
+  /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
+  /* .ssh_serialize_private = */ ssh_generic_serialize_private,
+  /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
+  /* .generate = */ ssh_generic_generate,
+  /* .copy_public = */ ssh_generic_copy_public,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
+};
+
+const struct sshkey_impl sshkey_ecdsanistp256_dilithium2_impl = {
+  /* .name = */ "ssh-ecdsanistp256_dilithium2",
+  /* .shortname = */ "ECDSANISTP256_DILITHIUM2",
+  /* .sigalg = */ NULL,
+  /* .type = */ KEY_DILITHIUM_2,
+  /* .nid = */ NID_X9_62_prime256v1,
+  /* .cert = */ 0,
+  /* .sigonly = */ 0,
+  /* .keybits = */ 256, // TODO - What should be here?
+  /* .funcs = */ &sshkey_ecdsanistp256_dilithium2_funcs,
+};
+static const struct sshkey_impl_funcs sshkey_ecdsanistp384_dilithium3_funcs = {
+  /* .size = */ ssh_generic_size,
+  /* .alloc = */ ssh_generic_alloc,
+  /* .cleanup = */ ssh_generic_cleanup,
+  /* .equal = */ ssh_generic_equal,
+  /* .ssh_serialize_public = */ ssh_generic_serialize_public,
+  /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
+  /* .ssh_serialize_private = */ ssh_generic_serialize_private,
+  /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
+  /* .generate = */ ssh_generic_generate,
+  /* .copy_public = */ ssh_generic_copy_public,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
+};
+
+const struct sshkey_impl sshkey_ecdsanistp384_dilithium3_impl = {
+  /* .name = */ "ssh-ecdsanistp384_dilithium3",
+  /* .shortname = */ "ECDSANISTP384_DILITHIUM3",
+  /* .sigalg = */ NULL,
+  /* .type = */ KEY_DILITHIUM_3,
+  /* .nid = */ NID_secp384r1,
+  /* .cert = */ 0,
+  /* .sigonly = */ 0,
+  /* .keybits = */ 256, // TODO - What should be here?
+  /* .funcs = */ &sshkey_ecdsanistp384_dilithium3_funcs,
+};
+static const struct sshkey_impl_funcs sshkey_ecdsanistp521_dilithium5_funcs = {
+  /* .size = */ ssh_generic_size,
+  /* .alloc = */ ssh_generic_alloc,
+  /* .cleanup = */ ssh_generic_cleanup,
+  /* .equal = */ ssh_generic_equal,
+  /* .ssh_serialize_public = */ ssh_generic_serialize_public,
+  /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
+  /* .ssh_serialize_private = */ ssh_generic_serialize_private,
+  /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
+  /* .generate = */ ssh_generic_generate,
+  /* .copy_public = */ ssh_generic_copy_public,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
+};
+
+const struct sshkey_impl sshkey_ecdsanistp521_dilithium5_impl = {
+  /* .name = */ "ssh-ecdsanistp521_dilithium5",
+  /* .shortname = */ "ECDSANISTP521_DILITHIUM5",
+  /* .sigalg = */ NULL,
+  /* .type = */ KEY_DILITHIUM_5,
+  /* .nid = */ NID_secp521r1,
+  /* .cert = */ 0,
+  /* .sigonly = */ 0,
+  /* .keybits = */ 256, // TODO - What should be here?
+  /* .funcs = */ &sshkey_ecdsanistp521_dilithium5_funcs,
+};
+static const struct sshkey_impl_funcs sshkey_ecdsanistp256_sphincssha2128fsimple_funcs = {
+  /* .size = */ ssh_generic_size,
+  /* .alloc = */ ssh_generic_alloc,
+  /* .cleanup = */ ssh_generic_cleanup,
+  /* .equal = */ ssh_generic_equal,
+  /* .ssh_serialize_public = */ ssh_generic_serialize_public,
+  /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
+  /* .ssh_serialize_private = */ ssh_generic_serialize_private,
+  /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
+  /* .generate = */ ssh_generic_generate,
+  /* .copy_public = */ ssh_generic_copy_public,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
+};
+
+const struct sshkey_impl sshkey_ecdsanistp256_sphincssha2128fsimple_impl = {
+  /* .name = */ "ssh-ecdsanistp256_sphincssha2128fsimple",
+  /* .shortname = */ "ECDSANISTP256_SPHINCSSHA2128FSIMPLE",
+  /* .sigalg = */ NULL,
+  /* .type = */ KEY_SPHINCS_SHA2_128F_SIMPLE,
+  /* .nid = */ NID_X9_62_prime256v1,
+  /* .cert = */ 0,
+  /* .sigonly = */ 0,
+  /* .keybits = */ 256, // TODO - What should be here?
+  /* .funcs = */ &sshkey_ecdsanistp256_sphincssha2128fsimple_funcs,
+};
+static const struct sshkey_impl_funcs sshkey_ecdsanistp521_sphincssha2256fsimple_funcs = {
+  /* .size = */ ssh_generic_size,
+  /* .alloc = */ ssh_generic_alloc,
+  /* .cleanup = */ ssh_generic_cleanup,
+  /* .equal = */ ssh_generic_equal,
+  /* .ssh_serialize_public = */ ssh_generic_serialize_public,
+  /* .ssh_deserialize_public = */ ssh_generic_deserialize_public,
+  /* .ssh_serialize_private = */ ssh_generic_serialize_private,
+  /* .ssh_deserialize_private = */ ssh_generic_deserialize_private,
+  /* .generate = */ ssh_generic_generate,
+  /* .copy_public = */ ssh_generic_copy_public,
+  /* .sign = */ ssh_generic_sign,
+  /* .verify = */ ssh_generic_verify,
+};
+
+const struct sshkey_impl sshkey_ecdsanistp521_sphincssha2256fsimple_impl = {
+  /* .name = */ "ssh-ecdsanistp521_sphincssha2256fsimple",
+  /* .shortname = */ "ECDSANISTP521_SPHINCSSHA2256FSIMPLE",
+  /* .sigalg = */ NULL,
+  /* .type = */ KEY_SPHINCS_SHA2_256F_SIMPLE,
+  /* .nid = */ NID_secp521r1,
+  /* .cert = */ 0,
+  /* .sigonly = */ 0,
+  /* .keybits = */ 256, // TODO - What should be here?
+  /* .funcs = */ &sshkey_ecdsanistp521_sphincssha2256fsimple_funcs,
+};
+#endif /* OPENSSL_HAS_ECC */
 #endif /* WITH_OPENSSL */
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_FUNCTIONS_END
 

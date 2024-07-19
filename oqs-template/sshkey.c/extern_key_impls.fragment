@@ -11,7 +11,7 @@ extern const struct sshkey_impl sshkey_{{ alg['name']|replace('_','') }}_{{ sig[
 #ifdef OPENSSL_HAS_ECC
 {%- for sig in config['sigs'] %}
   {%- for alg in sig['mix_with'] if not alg['rsa'] %}
-// extern const struct sshkey_impl sshkey_{{ alg['name']|replace('_','') }}_{{ sig['name']|replace('_','') }}_impl;
+extern const struct sshkey_impl sshkey_{{ alg['name']|replace('_','') }}_{{ sig['name']|replace('_','') }}_impl;
   {%- endfor %}
 {%- endfor %}
 #endif /* OPENSSL_HAS_ECC */
