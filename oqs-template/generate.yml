@@ -10,6 +10,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'ecdh-nistp256-frodokem-640-aesr2-sha256@openquantumsafe.org'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'x25519-frodokem-640-aesr2-sha256@openquantumsafe.org'
   -
     family: 'FrodoKEM'
     name: 'frodokem_976_aes'
@@ -40,6 +44,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'ecdh-nistp256-frodokem-640-shaker2-sha256@openquantumsafe.org'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'x25519-frodokem-640-shaker2-sha256@openquantumsafe.org'
   -
     family: 'FrodoKEM'
     name: 'frodokem_976_shake'
@@ -70,6 +78,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'ecdh-nistp256-kyber-512r3-sha256-d00@openquantumsafe.org'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'x25519-kyber-512r3-sha256-d00@amazon.com'
   -
     family: 'Kyber'
     name: 'kyber_768'
@@ -100,6 +112,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'ecdh-nistp256-bike-l1r4-sha512@openquantumsafe.org'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'x25519-bike-l1r4-sha512@openquantumsafe.org'
   -
     family: 'BIKE'
     name: 'bike_l3'
@@ -130,6 +146,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'ecdh-nistp256-classic-mceliece-348864r4-sha256@openquantumsafe.org'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'x25519-classic-mceliece-348864r4-sha256@openquantumsafe.org'
   -
     family: 'ClassicMcEliece'
     name: 'classic_mceliece_348864f'
@@ -140,6 +160,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'ecdh-nistp256-classic-mceliece-348864fr4-sha256@openquantumsafe.org'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'x25519-classic-mceliece-348864fr4-sha256@openquantumsafe.org'
   -
     family: 'ClassicMcEliece'
     name: 'classic_mceliece_460896'
@@ -230,6 +254,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'ecdh-nistp256-hqc-128r3-sha256@openquantumsafe.org'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'x25519-hqc-128r3-sha256@openquantumsafe.org'
   -
     family: 'HQC'
     name: 'hqc_192'
@@ -260,6 +288,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'ecdh-nistp256-ml-kem-512-sha256@openquantumsafe.org'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'x25519-ml-kem-512-sha256@openquantumsafe.org'
   -
     family: 'ML-KEM'
     name: 'ml_kem_768'
@@ -270,6 +302,10 @@ kexs:
         name: 'nistp256'
         openssl_nid: 'NID_X9_62_prime256v1'
         pretty_name: 'mlkem768nistp256-sha256'
+      -
+        name: 'x25519'
+        x25519: true
+        pretty_name: 'mlkem768x25519-sha256'
   -
     family: 'ML-KEM'
     name: 'ml_kem_1024'

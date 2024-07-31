@@ -66,19 +66,25 @@
 #define	KEX_SNTRUP761X25519_SHA512	"sntrup761x25519-sha512@openssh.com"
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_KEX_PRETTY_NAMES_START
 #define	KEX_FRODOKEM_640_AES_SHA256	"frodokem-640-aes-sha256"
+#define	KEX_FRODOKEM_640_AES_X25519_SHA256	"x25519-frodokem-640-aesr2-sha256@openquantumsafe.org"
 #define	KEX_FRODOKEM_976_AES_SHA384	"frodokem-976-aes-sha384"
 #define	KEX_FRODOKEM_1344_AES_SHA512	"frodokem-1344-aes-sha512"
 #define	KEX_FRODOKEM_640_SHAKE_SHA256	"frodokem-640-shake-sha256"
+#define	KEX_FRODOKEM_640_SHAKE_X25519_SHA256	"x25519-frodokem-640-shaker2-sha256@openquantumsafe.org"
 #define	KEX_FRODOKEM_976_SHAKE_SHA384	"frodokem-976-shake-sha384"
 #define	KEX_FRODOKEM_1344_SHAKE_SHA512	"frodokem-1344-shake-sha512"
 #define	KEX_KYBER_512_SHA256	"kyber-512-sha256"
+#define	KEX_KYBER_512_X25519_SHA256	"x25519-kyber-512r3-sha256-d00@amazon.com"
 #define	KEX_KYBER_768_SHA384	"kyber-768-sha384"
 #define	KEX_KYBER_1024_SHA512	"kyber-1024-sha512"
 #define	KEX_BIKE_L1_SHA512	"bike-l1-sha512"
+#define	KEX_BIKE_L1_X25519_SHA512	"x25519-bike-l1r4-sha512@openquantumsafe.org"
 #define	KEX_BIKE_L3_SHA512	"bike-l3-sha512"
 #define	KEX_BIKE_L5_SHA512	"bike-l5-sha512"
 #define	KEX_CLASSIC_MCELIECE_348864_SHA256	"classic-mceliece-348864-sha256"
+#define	KEX_CLASSIC_MCELIECE_348864_X25519_SHA256	"x25519-classic-mceliece-348864r4-sha256@openquantumsafe.org"
 #define	KEX_CLASSIC_MCELIECE_348864F_SHA256	"classic-mceliece-348864f-sha256"
+#define	KEX_CLASSIC_MCELIECE_348864F_X25519_SHA256	"x25519-classic-mceliece-348864fr4-sha256@openquantumsafe.org"
 #define	KEX_CLASSIC_MCELIECE_460896_SHA512	"classic-mceliece-460896-sha512"
 #define	KEX_CLASSIC_MCELIECE_460896F_SHA512	"classic-mceliece-460896f-sha512"
 #define	KEX_CLASSIC_MCELIECE_6688128_SHA512	"classic-mceliece-6688128-sha512"
@@ -88,10 +94,13 @@
 #define	KEX_CLASSIC_MCELIECE_8192128_SHA512	"classic-mceliece-8192128-sha512"
 #define	KEX_CLASSIC_MCELIECE_8192128F_SHA512	"classic-mceliece-8192128f-sha512"
 #define	KEX_HQC_128_SHA256	"hqc-128-sha256"
+#define	KEX_HQC_128_X25519_SHA256	"x25519-hqc-128r3-sha256@openquantumsafe.org"
 #define	KEX_HQC_192_SHA384	"hqc-192-sha384"
 #define	KEX_HQC_256_SHA512	"hqc-256-sha512"
 #define	KEX_ML_KEM_512_SHA256	"ml-kem-512-sha256"
+#define	KEX_ML_KEM_512_X25519_SHA256	"x25519-ml-kem-512-sha256@openquantumsafe.org"
 #define	KEX_ML_KEM_768_SHA256	"ml-kem-768-sha256"
+#define	KEX_ML_KEM_768_X25519_SHA256	"mlkem768x25519-sha256"
 #define	KEX_ML_KEM_1024_SHA384	"ml-kem-1024-sha384"
 #ifdef WITH_OPENSSL
 #ifdef OPENSSL_HAS_ECC
@@ -167,19 +176,25 @@ enum kex_exchange {
 	KEX_KEM_SNTRUP761X25519_SHA512,
 ///// OQS_TEMPLATE_FRAGMENT_ADD_KEX_ENUMS_START
 	KEX_KEM_FRODOKEM_640_AES_SHA256,
+	KEX_KEM_FRODOKEM_640_AES_X25519_SHA256,
 	KEX_KEM_FRODOKEM_976_AES_SHA384,
 	KEX_KEM_FRODOKEM_1344_AES_SHA512,
 	KEX_KEM_FRODOKEM_640_SHAKE_SHA256,
+	KEX_KEM_FRODOKEM_640_SHAKE_X25519_SHA256,
 	KEX_KEM_FRODOKEM_976_SHAKE_SHA384,
 	KEX_KEM_FRODOKEM_1344_SHAKE_SHA512,
 	KEX_KEM_KYBER_512_SHA256,
+	KEX_KEM_KYBER_512_X25519_SHA256,
 	KEX_KEM_KYBER_768_SHA384,
 	KEX_KEM_KYBER_1024_SHA512,
 	KEX_KEM_BIKE_L1_SHA512,
+	KEX_KEM_BIKE_L1_X25519_SHA512,
 	KEX_KEM_BIKE_L3_SHA512,
 	KEX_KEM_BIKE_L5_SHA512,
 	KEX_KEM_CLASSIC_MCELIECE_348864_SHA256,
+	KEX_KEM_CLASSIC_MCELIECE_348864_X25519_SHA256,
 	KEX_KEM_CLASSIC_MCELIECE_348864F_SHA256,
+	KEX_KEM_CLASSIC_MCELIECE_348864F_X25519_SHA256,
 	KEX_KEM_CLASSIC_MCELIECE_460896_SHA512,
 	KEX_KEM_CLASSIC_MCELIECE_460896F_SHA512,
 	KEX_KEM_CLASSIC_MCELIECE_6688128_SHA512,
@@ -189,10 +204,13 @@ enum kex_exchange {
 	KEX_KEM_CLASSIC_MCELIECE_8192128_SHA512,
 	KEX_KEM_CLASSIC_MCELIECE_8192128F_SHA512,
 	KEX_KEM_HQC_128_SHA256,
+	KEX_KEM_HQC_128_X25519_SHA256,
 	KEX_KEM_HQC_192_SHA384,
 	KEX_KEM_HQC_256_SHA512,
 	KEX_KEM_ML_KEM_512_SHA256,
+	KEX_KEM_ML_KEM_512_X25519_SHA256,
 	KEX_KEM_ML_KEM_768_SHA256,
+	KEX_KEM_ML_KEM_768_X25519_SHA256,
 	KEX_KEM_ML_KEM_1024_SHA384,
 #ifdef WITH_OPENSSL
 #ifdef OPENSSL_HAS_ECC
@@ -373,6 +391,10 @@ int	 kex_kem_sntrup761x25519_dec(struct kex *, const struct sshbuf *,
 int	 kex_kem_frodokem_640_aes_keypair(struct kex *);
 int	 kex_kem_frodokem_640_aes_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_frodokem_640_aes_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* frodokem_640_aes_x25519 prototypes */
+int	 kex_kem_frodokem_640_aes_x25519_keypair(struct kex *);
+int	 kex_kem_frodokem_640_aes_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_frodokem_640_aes_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* frodokem_976_aes prototypes */
 int	 kex_kem_frodokem_976_aes_keypair(struct kex *);
 int	 kex_kem_frodokem_976_aes_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
@@ -385,6 +407,10 @@ int	 kex_kem_frodokem_1344_aes_dec(struct kex *, const struct sshbuf *, struct s
 int	 kex_kem_frodokem_640_shake_keypair(struct kex *);
 int	 kex_kem_frodokem_640_shake_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_frodokem_640_shake_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* frodokem_640_shake_x25519 prototypes */
+int	 kex_kem_frodokem_640_shake_x25519_keypair(struct kex *);
+int	 kex_kem_frodokem_640_shake_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_frodokem_640_shake_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* frodokem_976_shake prototypes */
 int	 kex_kem_frodokem_976_shake_keypair(struct kex *);
 int	 kex_kem_frodokem_976_shake_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
@@ -397,6 +423,10 @@ int	 kex_kem_frodokem_1344_shake_dec(struct kex *, const struct sshbuf *, struct
 int	 kex_kem_kyber_512_keypair(struct kex *);
 int	 kex_kem_kyber_512_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_kyber_512_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* kyber_512_x25519 prototypes */
+int	 kex_kem_kyber_512_x25519_keypair(struct kex *);
+int	 kex_kem_kyber_512_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_kyber_512_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* kyber_768 prototypes */
 int	 kex_kem_kyber_768_keypair(struct kex *);
 int	 kex_kem_kyber_768_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
@@ -409,6 +439,10 @@ int	 kex_kem_kyber_1024_dec(struct kex *, const struct sshbuf *, struct sshbuf *
 int	 kex_kem_bike_l1_keypair(struct kex *);
 int	 kex_kem_bike_l1_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_bike_l1_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* bike_l1_x25519 prototypes */
+int	 kex_kem_bike_l1_x25519_keypair(struct kex *);
+int	 kex_kem_bike_l1_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_bike_l1_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* bike_l3 prototypes */
 int	 kex_kem_bike_l3_keypair(struct kex *);
 int	 kex_kem_bike_l3_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
@@ -421,10 +455,18 @@ int	 kex_kem_bike_l5_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 int	 kex_kem_classic_mceliece_348864_keypair(struct kex *);
 int	 kex_kem_classic_mceliece_348864_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_classic_mceliece_348864_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* classic_mceliece_348864_x25519 prototypes */
+int	 kex_kem_classic_mceliece_348864_x25519_keypair(struct kex *);
+int	 kex_kem_classic_mceliece_348864_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_classic_mceliece_348864_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* classic_mceliece_348864f prototypes */
 int	 kex_kem_classic_mceliece_348864f_keypair(struct kex *);
 int	 kex_kem_classic_mceliece_348864f_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_classic_mceliece_348864f_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* classic_mceliece_348864f_x25519 prototypes */
+int	 kex_kem_classic_mceliece_348864f_x25519_keypair(struct kex *);
+int	 kex_kem_classic_mceliece_348864f_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_classic_mceliece_348864f_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* classic_mceliece_460896 prototypes */
 int	 kex_kem_classic_mceliece_460896_keypair(struct kex *);
 int	 kex_kem_classic_mceliece_460896_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
@@ -461,6 +503,10 @@ int	 kex_kem_classic_mceliece_8192128f_dec(struct kex *, const struct sshbuf *, 
 int	 kex_kem_hqc_128_keypair(struct kex *);
 int	 kex_kem_hqc_128_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_hqc_128_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* hqc_128_x25519 prototypes */
+int	 kex_kem_hqc_128_x25519_keypair(struct kex *);
+int	 kex_kem_hqc_128_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_hqc_128_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* hqc_192 prototypes */
 int	 kex_kem_hqc_192_keypair(struct kex *);
 int	 kex_kem_hqc_192_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
@@ -473,10 +519,18 @@ int	 kex_kem_hqc_256_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 int	 kex_kem_ml_kem_512_keypair(struct kex *);
 int	 kex_kem_ml_kem_512_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_ml_kem_512_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* ml_kem_512_x25519 prototypes */
+int	 kex_kem_ml_kem_512_x25519_keypair(struct kex *);
+int	 kex_kem_ml_kem_512_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_ml_kem_512_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* ml_kem_768 prototypes */
 int	 kex_kem_ml_kem_768_keypair(struct kex *);
 int	 kex_kem_ml_kem_768_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_ml_kem_768_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+/* ml_kem_768_x25519 prototypes */
+int	 kex_kem_ml_kem_768_x25519_keypair(struct kex *);
+int	 kex_kem_ml_kem_768_x25519_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_ml_kem_768_x25519_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
 /* ml_kem_1024 prototypes */
 int	 kex_kem_ml_kem_1024_keypair(struct kex *);
 int	 kex_kem_ml_kem_1024_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);

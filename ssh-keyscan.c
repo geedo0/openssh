@@ -438,19 +438,25 @@ keygrab_ssh2(con *c)
 	c->c_ssh->kex->kex[KEX_C25519_SHA256] = kex_gen_client;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_KEX_GEN_CLIENT_START
 	c->c_ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_SHA256] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_X25519_SHA256] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_FRODOKEM_976_AES_SHA384] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_FRODOKEM_1344_AES_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_FRODOKEM_640_SHAKE_SHA256] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_FRODOKEM_640_SHAKE_X25519_SHA256] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_FRODOKEM_976_SHAKE_SHA384] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_FRODOKEM_1344_SHAKE_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_KYBER_512_SHA256] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_KYBER_512_X25519_SHA256] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_KYBER_768_SHA384] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_KYBER_1024_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_BIKE_L1_SHA512] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_BIKE_L1_X25519_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_BIKE_L3_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_BIKE_L5_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864_SHA256] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864_X25519_SHA256] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864F_SHA256] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864F_X25519_SHA256] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_460896_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_460896F_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_6688128_SHA512] = kex_gen_client;
@@ -460,10 +466,13 @@ keygrab_ssh2(con *c)
 	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_8192128_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_8192128F_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_HQC_128_SHA256] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_HQC_128_X25519_SHA256] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_HQC_192_SHA384] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_HQC_256_SHA512] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_ML_KEM_512_SHA256] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_ML_KEM_512_X25519_SHA256] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_ML_KEM_768_SHA256] = kex_gen_client;
+	c->c_ssh->kex->kex[KEX_KEM_ML_KEM_768_X25519_SHA256] = kex_gen_client;
 	c->c_ssh->kex->kex[KEX_KEM_ML_KEM_1024_SHA384] = kex_gen_client;
 #ifdef WITH_OPENSSL
 #ifdef OPENSSL_HAS_ECC

@@ -3,11 +3,17 @@
 int	 kex_kem_{{ kex['name'] }}_keypair(struct kex *);
 int	 kex_kem_{{ kex['name'] }}_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
 int	 kex_kem_{{ kex['name'] }}_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+{%- for curve in kex['mix_with'] if curve['x25519'] %}
+/* {{ kex['name'] }}_{{ curve['name'] }} prototypes */
+int	 kex_kem_{{ kex['name'] }}_{{ curve['name'] }}_keypair(struct kex *);
+int	 kex_kem_{{ kex['name'] }}_{{ curve['name'] }}_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);
+int	 kex_kem_{{ kex['name'] }}_{{ curve['name'] }}_dec(struct kex *, const struct sshbuf *, struct sshbuf **);
+{%- endfor %}
 {%- endfor %}
 #ifdef WITH_OPENSSL
 #ifdef OPENSSL_HAS_ECC
 {%- for kex in config['kexs'] -%}
-    {%- for curve in kex['mix_with'] %}
+    {%- for curve in kex['mix_with'] if not curve['x25519'] %}
 /* {{ kex['name'] }}_{{ curve['name'] }} prototypes */
 int	 kex_kem_{{ kex['name'] }}_ecdh_{{ curve['name'] }}_keypair(struct kex *);
 int	 kex_kem_{{ kex['name'] }}_ecdh_{{ curve['name'] }}_enc(struct kex *, const struct sshbuf *, struct sshbuf **, struct sshbuf **);

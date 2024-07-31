@@ -125,6 +125,9 @@ kex_gen_client(struct ssh *ssh)
 	case KEX_KEM_FRODOKEM_640_AES_SHA256:
 		r = kex_kem_frodokem_640_aes_keypair(kex);
 		break;
+	case KEX_KEM_FRODOKEM_640_AES_X25519_SHA256:
+		r = kex_kem_frodokem_640_aes_x25519_keypair(kex);
+		break;
 	case KEX_KEM_FRODOKEM_976_AES_SHA384:
 		r = kex_kem_frodokem_976_aes_keypair(kex);
 		break;
@@ -133,6 +136,9 @@ kex_gen_client(struct ssh *ssh)
 		break;
 	case KEX_KEM_FRODOKEM_640_SHAKE_SHA256:
 		r = kex_kem_frodokem_640_shake_keypair(kex);
+		break;
+	case KEX_KEM_FRODOKEM_640_SHAKE_X25519_SHA256:
+		r = kex_kem_frodokem_640_shake_x25519_keypair(kex);
 		break;
 	case KEX_KEM_FRODOKEM_976_SHAKE_SHA384:
 		r = kex_kem_frodokem_976_shake_keypair(kex);
@@ -143,6 +149,9 @@ kex_gen_client(struct ssh *ssh)
 	case KEX_KEM_KYBER_512_SHA256:
 		r = kex_kem_kyber_512_keypair(kex);
 		break;
+	case KEX_KEM_KYBER_512_X25519_SHA256:
+		r = kex_kem_kyber_512_x25519_keypair(kex);
+		break;
 	case KEX_KEM_KYBER_768_SHA384:
 		r = kex_kem_kyber_768_keypair(kex);
 		break;
@@ -151,6 +160,9 @@ kex_gen_client(struct ssh *ssh)
 		break;
 	case KEX_KEM_BIKE_L1_SHA512:
 		r = kex_kem_bike_l1_keypair(kex);
+		break;
+	case KEX_KEM_BIKE_L1_X25519_SHA512:
+		r = kex_kem_bike_l1_x25519_keypair(kex);
 		break;
 	case KEX_KEM_BIKE_L3_SHA512:
 		r = kex_kem_bike_l3_keypair(kex);
@@ -161,8 +173,14 @@ kex_gen_client(struct ssh *ssh)
 	case KEX_KEM_CLASSIC_MCELIECE_348864_SHA256:
 		r = kex_kem_classic_mceliece_348864_keypair(kex);
 		break;
+	case KEX_KEM_CLASSIC_MCELIECE_348864_X25519_SHA256:
+		r = kex_kem_classic_mceliece_348864_x25519_keypair(kex);
+		break;
 	case KEX_KEM_CLASSIC_MCELIECE_348864F_SHA256:
 		r = kex_kem_classic_mceliece_348864f_keypair(kex);
+		break;
+	case KEX_KEM_CLASSIC_MCELIECE_348864F_X25519_SHA256:
+		r = kex_kem_classic_mceliece_348864f_x25519_keypair(kex);
 		break;
 	case KEX_KEM_CLASSIC_MCELIECE_460896_SHA512:
 		r = kex_kem_classic_mceliece_460896_keypair(kex);
@@ -191,6 +209,9 @@ kex_gen_client(struct ssh *ssh)
 	case KEX_KEM_HQC_128_SHA256:
 		r = kex_kem_hqc_128_keypair(kex);
 		break;
+	case KEX_KEM_HQC_128_X25519_SHA256:
+		r = kex_kem_hqc_128_x25519_keypair(kex);
+		break;
 	case KEX_KEM_HQC_192_SHA384:
 		r = kex_kem_hqc_192_keypair(kex);
 		break;
@@ -200,8 +221,14 @@ kex_gen_client(struct ssh *ssh)
 	case KEX_KEM_ML_KEM_512_SHA256:
 		r = kex_kem_ml_kem_512_keypair(kex);
 		break;
+	case KEX_KEM_ML_KEM_512_X25519_SHA256:
+		r = kex_kem_ml_kem_512_x25519_keypair(kex);
+		break;
 	case KEX_KEM_ML_KEM_768_SHA256:
 		r = kex_kem_ml_kem_768_keypair(kex);
+		break;
+	case KEX_KEM_ML_KEM_768_X25519_SHA256:
+		r = kex_kem_ml_kem_768_x25519_keypair(kex);
 		break;
 	case KEX_KEM_ML_KEM_1024_SHA384:
 		r = kex_kem_ml_kem_1024_keypair(kex);
@@ -371,6 +398,9 @@ input_kex_gen_reply(int type, u_int32_t seq, struct ssh *ssh)
 	case KEX_KEM_FRODOKEM_640_AES_SHA256:
 		r = kex_kem_frodokem_640_aes_dec(kex, server_blob, &shared_secret);
 		break;
+	case KEX_KEM_FRODOKEM_640_AES_X25519_SHA256:
+		r = kex_kem_frodokem_640_aes_x25519_dec(kex, server_blob, &shared_secret);
+		break;
 	case KEX_KEM_FRODOKEM_976_AES_SHA384:
 		r = kex_kem_frodokem_976_aes_dec(kex, server_blob, &shared_secret);
 		break;
@@ -379,6 +409,9 @@ input_kex_gen_reply(int type, u_int32_t seq, struct ssh *ssh)
 		break;
 	case KEX_KEM_FRODOKEM_640_SHAKE_SHA256:
 		r = kex_kem_frodokem_640_shake_dec(kex, server_blob, &shared_secret);
+		break;
+	case KEX_KEM_FRODOKEM_640_SHAKE_X25519_SHA256:
+		r = kex_kem_frodokem_640_shake_x25519_dec(kex, server_blob, &shared_secret);
 		break;
 	case KEX_KEM_FRODOKEM_976_SHAKE_SHA384:
 		r = kex_kem_frodokem_976_shake_dec(kex, server_blob, &shared_secret);
@@ -389,6 +422,9 @@ input_kex_gen_reply(int type, u_int32_t seq, struct ssh *ssh)
 	case KEX_KEM_KYBER_512_SHA256:
 		r = kex_kem_kyber_512_dec(kex, server_blob, &shared_secret);
 		break;
+	case KEX_KEM_KYBER_512_X25519_SHA256:
+		r = kex_kem_kyber_512_x25519_dec(kex, server_blob, &shared_secret);
+		break;
 	case KEX_KEM_KYBER_768_SHA384:
 		r = kex_kem_kyber_768_dec(kex, server_blob, &shared_secret);
 		break;
@@ -397,6 +433,9 @@ input_kex_gen_reply(int type, u_int32_t seq, struct ssh *ssh)
 		break;
 	case KEX_KEM_BIKE_L1_SHA512:
 		r = kex_kem_bike_l1_dec(kex, server_blob, &shared_secret);
+		break;
+	case KEX_KEM_BIKE_L1_X25519_SHA512:
+		r = kex_kem_bike_l1_x25519_dec(kex, server_blob, &shared_secret);
 		break;
 	case KEX_KEM_BIKE_L3_SHA512:
 		r = kex_kem_bike_l3_dec(kex, server_blob, &shared_secret);
@@ -407,8 +446,14 @@ input_kex_gen_reply(int type, u_int32_t seq, struct ssh *ssh)
 	case KEX_KEM_CLASSIC_MCELIECE_348864_SHA256:
 		r = kex_kem_classic_mceliece_348864_dec(kex, server_blob, &shared_secret);
 		break;
+	case KEX_KEM_CLASSIC_MCELIECE_348864_X25519_SHA256:
+		r = kex_kem_classic_mceliece_348864_x25519_dec(kex, server_blob, &shared_secret);
+		break;
 	case KEX_KEM_CLASSIC_MCELIECE_348864F_SHA256:
 		r = kex_kem_classic_mceliece_348864f_dec(kex, server_blob, &shared_secret);
+		break;
+	case KEX_KEM_CLASSIC_MCELIECE_348864F_X25519_SHA256:
+		r = kex_kem_classic_mceliece_348864f_x25519_dec(kex, server_blob, &shared_secret);
 		break;
 	case KEX_KEM_CLASSIC_MCELIECE_460896_SHA512:
 		r = kex_kem_classic_mceliece_460896_dec(kex, server_blob, &shared_secret);
@@ -437,6 +482,9 @@ input_kex_gen_reply(int type, u_int32_t seq, struct ssh *ssh)
 	case KEX_KEM_HQC_128_SHA256:
 		r = kex_kem_hqc_128_dec(kex, server_blob, &shared_secret);
 		break;
+	case KEX_KEM_HQC_128_X25519_SHA256:
+		r = kex_kem_hqc_128_x25519_dec(kex, server_blob, &shared_secret);
+		break;
 	case KEX_KEM_HQC_192_SHA384:
 		r = kex_kem_hqc_192_dec(kex, server_blob, &shared_secret);
 		break;
@@ -446,8 +494,14 @@ input_kex_gen_reply(int type, u_int32_t seq, struct ssh *ssh)
 	case KEX_KEM_ML_KEM_512_SHA256:
 		r = kex_kem_ml_kem_512_dec(kex, server_blob, &shared_secret);
 		break;
+	case KEX_KEM_ML_KEM_512_X25519_SHA256:
+		r = kex_kem_ml_kem_512_x25519_dec(kex, server_blob, &shared_secret);
+		break;
 	case KEX_KEM_ML_KEM_768_SHA256:
 		r = kex_kem_ml_kem_768_dec(kex, server_blob, &shared_secret);
+		break;
+	case KEX_KEM_ML_KEM_768_X25519_SHA256:
+		r = kex_kem_ml_kem_768_x25519_dec(kex, server_blob, &shared_secret);
 		break;
 	case KEX_KEM_ML_KEM_1024_SHA384:
 		r = kex_kem_ml_kem_1024_dec(kex, server_blob, &shared_secret);
@@ -669,6 +723,10 @@ input_kex_gen_init(int type, u_int32_t seq, struct ssh *ssh)
 		r = kex_kem_frodokem_640_aes_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
+	case KEX_KEM_FRODOKEM_640_AES_X25519_SHA256:
+		r = kex_kem_frodokem_640_aes_x25519_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
 	case KEX_KEM_FRODOKEM_976_AES_SHA384:
 		r = kex_kem_frodokem_976_aes_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
@@ -679,6 +737,10 @@ input_kex_gen_init(int type, u_int32_t seq, struct ssh *ssh)
 		break;
 	case KEX_KEM_FRODOKEM_640_SHAKE_SHA256:
 		r = kex_kem_frodokem_640_shake_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
+	case KEX_KEM_FRODOKEM_640_SHAKE_X25519_SHA256:
+		r = kex_kem_frodokem_640_shake_x25519_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_FRODOKEM_976_SHAKE_SHA384:
@@ -693,6 +755,10 @@ input_kex_gen_init(int type, u_int32_t seq, struct ssh *ssh)
 		r = kex_kem_kyber_512_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
+	case KEX_KEM_KYBER_512_X25519_SHA256:
+		r = kex_kem_kyber_512_x25519_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
 	case KEX_KEM_KYBER_768_SHA384:
 		r = kex_kem_kyber_768_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
@@ -703,6 +769,10 @@ input_kex_gen_init(int type, u_int32_t seq, struct ssh *ssh)
 		break;
 	case KEX_KEM_BIKE_L1_SHA512:
 		r = kex_kem_bike_l1_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
+	case KEX_KEM_BIKE_L1_X25519_SHA512:
+		r = kex_kem_bike_l1_x25519_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_BIKE_L3_SHA512:
@@ -717,8 +787,16 @@ input_kex_gen_init(int type, u_int32_t seq, struct ssh *ssh)
 		r = kex_kem_classic_mceliece_348864_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
+	case KEX_KEM_CLASSIC_MCELIECE_348864_X25519_SHA256:
+		r = kex_kem_classic_mceliece_348864_x25519_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
 	case KEX_KEM_CLASSIC_MCELIECE_348864F_SHA256:
 		r = kex_kem_classic_mceliece_348864f_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
+	case KEX_KEM_CLASSIC_MCELIECE_348864F_X25519_SHA256:
+		r = kex_kem_classic_mceliece_348864f_x25519_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_CLASSIC_MCELIECE_460896_SHA512:
@@ -757,6 +835,10 @@ input_kex_gen_init(int type, u_int32_t seq, struct ssh *ssh)
 		r = kex_kem_hqc_128_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
+	case KEX_KEM_HQC_128_X25519_SHA256:
+		r = kex_kem_hqc_128_x25519_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
 	case KEX_KEM_HQC_192_SHA384:
 		r = kex_kem_hqc_192_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
@@ -769,8 +851,16 @@ input_kex_gen_init(int type, u_int32_t seq, struct ssh *ssh)
 		r = kex_kem_ml_kem_512_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
+	case KEX_KEM_ML_KEM_512_X25519_SHA256:
+		r = kex_kem_ml_kem_512_x25519_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
 	case KEX_KEM_ML_KEM_768_SHA256:
 		r = kex_kem_ml_kem_768_enc(kex, client_pubkey,
+		    &server_pubkey, &shared_secret);
+		break;
+	case KEX_KEM_ML_KEM_768_X25519_SHA256:
+		r = kex_kem_ml_kem_768_x25519_enc(kex, client_pubkey,
 		    &server_pubkey, &shared_secret);
 		break;
 	case KEX_KEM_ML_KEM_1024_SHA384:
