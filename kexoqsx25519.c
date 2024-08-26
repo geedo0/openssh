@@ -87,6 +87,12 @@ static int kex_kem_generic_with_x25519_enc(OQS_KEM *kem, struct kex *kex,
   *server_blobp = NULL;
   *shared_secretp = NULL;
 
+  /* client_blob contains both KEM and ECDH client pubkeys */
+  needed = kem->length_public_key + CURVE25519_SIZE;
+  if (sshbuf_len(client_blob) != needed) {
+    r = SSH_ERR_SIGNATURE_INVALID;
+    goto out;
+  }
   /* get a pointer to the client PQC public key */
   client_pub = sshbuf_ptr(client_blob);
 
@@ -116,11 +122,12 @@ static int kex_kem_generic_with_x25519_enc(OQS_KEM *kem, struct kex *kex,
   /* generate and encrypt KEM key with client key */
   if (OQS_KEM_encaps(kem, public_key, private_key, client_pub)
       != OQS_SUCCESS) {
+    r = SSH_ERR_LIBCRYPTO_ERROR;
     goto out;
   }
   client_pub += kem->length_public_key;
   public_key += kem->length_ciphertext;
-  private_key += kem->length_shared_secret;
+  /* private_key += kem->length_shared_secret; */
 
   kexc25519_keygen(server_key, public_key);
   if ((r = kexc25519_shared_key_ext(server_key, client_pub, buf, 1)) < 0) {
@@ -184,6 +191,7 @@ static int kex_kem_generic_with_x25519_dec(OQS_KEM *kem, struct kex *kex,
   /* decapsulate the post-quantum secret */
   if (OQS_KEM_decaps(kem, private_key, public_key,
                      kex->oqs_client_key) != OQS_SUCCESS) {
+    r = SSH_ERR_LIBCRYPTO_ERROR;
     goto out;
   }
   public_key += kem->length_ciphertext;
@@ -546,6 +554,7 @@ int kex_kem_ml_kem_512_x25519_dec(struct kex *kex,
 int kex_kem_ml_kem_768_x25519_keypair(struct kex *kex)
 {
     OQS_KEM *kem = OQS_KEM_new(OQS_KEM_alg_ml_kem_768);
+    //OQS_KEM *kem = OQS_KEM_new(OQS_KEM_alg_kyber_768);
     if (kem == NULL) {
         return SSH_ERR_ALLOC_FAIL;
     }
@@ -560,6 +569,7 @@ int kex_kem_ml_kem_768_x25519_enc(struct kex *kex,
                                    struct sshbuf **shared_secretp)
 {
     OQS_KEM *kem = OQS_KEM_new(OQS_KEM_alg_ml_kem_768);
+    //OQS_KEM *kem = OQS_KEM_new(OQS_KEM_alg_kyber_768);
     if (kem == NULL) {
         return SSH_ERR_ALLOC_FAIL;
     }
@@ -573,6 +583,7 @@ int kex_kem_ml_kem_768_x25519_dec(struct kex *kex,
                                        struct sshbuf **shared_secretp)
 {
     OQS_KEM *kem = OQS_KEM_new(OQS_KEM_alg_ml_kem_768);
+    //OQS_KEM *kem = OQS_KEM_new(OQS_KEM_alg_kyber_768);
     if (kem == NULL) {
         return SSH_ERR_ALLOC_FAIL;
     }

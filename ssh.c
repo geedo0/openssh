@@ -1655,7 +1655,7 @@ main(int ac, char **av)
 	if (options.hostbased_authentication) {
 		int loaded = 0;
 ///// OQS_TEMPLATE_FRAGMENT_COUNT_KEYTYPES_START
-		sensitive_data.nkeys = 10 + 24;
+		sensitive_data.nkeys = 10 + 17;
 ///// OQS_TEMPLATE_FRAGMENT_COUNT_KEYTYPES_END
 		sensitive_data.keys = xcalloc(sensitive_data.nkeys,
 		    sizeof(*sensitive_data.keys));

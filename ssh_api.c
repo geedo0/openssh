@@ -27,6 +27,7 @@
 #include "log.h"
 #include "authfile.h"
 #include "sshkey.h"
+#include "dh.h"
 #include "misc.h"
 #include "ssh2.h"
 #include "version.h"
@@ -50,10 +51,8 @@ int	_ssh_host_key_sign(struct ssh *, struct sshkey *, struct sshkey *,
     u_char **, size_t *, const u_char *, size_t, const char *);
 
 /*
- * stubs for the server side implementation of kex.
- * disable privsep so our stubs will never be called.
+ * stubs for privsep calls in the server side implementation of kex.
  */
-int	use_privsep = 0;
 int	mm_sshkey_sign(struct sshkey *, u_char **, u_int *,
     const u_char *, u_int, const char *, const char *, const char *, u_int);
 
@@ -66,14 +65,20 @@ mm_sshkey_sign(struct sshkey *key, u_char **sigp, u_int *lenp,
     const u_char *data, u_int datalen, const char *alg,
     const char *sk_provider, const char *sk_pin, u_int compat)
 {
-	return (-1);
+	size_t slen = 0;
+	int ret;
+
+	ret = sshkey_sign(key, sigp, &slen, data, datalen, alg,
+	    sk_provider, sk_pin, compat);
+	*lenp = slen;
+	return ret;
 }
 
 #ifdef WITH_OPENSSL
 DH *
 mm_choose_dh(int min, int nbits, int max)
 {
-	return (NULL);
+	return choose_dh(min, nbits, max);
 }
 #endif
 
@@ -131,25 +136,18 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_C25519_SHA256] = kex_gen_server;
 ///// OQS_TEMPLATE_FRAGMENT_POINT_TO_KEX_GEN_SERVER_START
 		ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_X25519_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_976_AES_SHA384] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_1344_AES_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_640_SHAKE_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_FRODOKEM_640_SHAKE_X25519_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_976_SHAKE_SHA384] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_1344_SHAKE_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_KYBER_512_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_KYBER_512_X25519_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_KYBER_768_SHA384] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_KYBER_1024_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_BIKE_L1_SHA512] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_BIKE_L1_X25519_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_BIKE_L3_SHA512] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_BIKE_L5_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864_X25519_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864F_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864F_X25519_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_460896_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_460896F_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_6688128_SHA512] = kex_gen_server;
@@ -159,14 +157,9 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_8192128_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_8192128F_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_HQC_128_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_HQC_128_X25519_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_HQC_192_SHA384] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_HQC_256_SHA512] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_ML_KEM_512_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_ML_KEM_512_X25519_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_ML_KEM_768_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_ML_KEM_768_X25519_SHA256] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_ML_KEM_1024_SHA384] = kex_gen_server;
 #ifdef WITH_OPENSSL
 #ifdef OPENSSL_HAS_ECC
 		ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_ECDH_NISTP256_SHA256] = kex_gen_server;
@@ -180,7 +173,6 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_KEM_KYBER_1024_ECDH_NISTP521_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_BIKE_L1_ECDH_NISTP256_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_BIKE_L3_ECDH_NISTP384_SHA512] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_BIKE_L5_ECDH_NISTP521_SHA512] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864_ECDH_NISTP256_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864F_ECDH_NISTP256_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_460896_ECDH_NISTP384_SHA512] = kex_gen_server;
@@ -194,7 +186,6 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_KEM_HQC_128_ECDH_NISTP256_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_HQC_192_ECDH_NISTP384_SHA384] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_HQC_256_ECDH_NISTP521_SHA512] = kex_gen_server;
-		ssh->kex->kex[KEX_KEM_ML_KEM_512_ECDH_NISTP256_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_ML_KEM_768_ECDH_NISTP256_SHA256] = kex_gen_server;
 		ssh->kex->kex[KEX_KEM_ML_KEM_1024_ECDH_NISTP384_SHA384] = kex_gen_server;
 #endif /* OPENSSL_HAS_ECC */
@@ -220,25 +211,18 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_C25519_SHA256] = kex_gen_client;
 ///// OQS_TEMPLATE_FRAGMENT_POINT_TO_KEX_GEN_CLIENT_START
 		ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_X25519_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_976_AES_SHA384] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_1344_AES_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_640_SHAKE_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_FRODOKEM_640_SHAKE_X25519_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_976_SHAKE_SHA384] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_FRODOKEM_1344_SHAKE_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_KYBER_512_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_KYBER_512_X25519_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_KYBER_768_SHA384] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_KYBER_1024_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_BIKE_L1_SHA512] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_BIKE_L1_X25519_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_BIKE_L3_SHA512] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_BIKE_L5_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864_X25519_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864F_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864F_X25519_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_460896_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_460896F_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_6688128_SHA512] = kex_gen_client;
@@ -248,14 +232,9 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_8192128_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_8192128F_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_HQC_128_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_HQC_128_X25519_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_HQC_192_SHA384] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_HQC_256_SHA512] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_ML_KEM_512_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_ML_KEM_512_X25519_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_ML_KEM_768_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_ML_KEM_768_X25519_SHA256] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_ML_KEM_1024_SHA384] = kex_gen_client;
 #ifdef WITH_OPENSSL
 #ifdef OPENSSL_HAS_ECC
 		ssh->kex->kex[KEX_KEM_FRODOKEM_640_AES_ECDH_NISTP256_SHA256] = kex_gen_client;
@@ -269,7 +248,6 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_KEM_KYBER_1024_ECDH_NISTP521_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_BIKE_L1_ECDH_NISTP256_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_BIKE_L3_ECDH_NISTP384_SHA512] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_BIKE_L5_ECDH_NISTP521_SHA512] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864_ECDH_NISTP256_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_348864F_ECDH_NISTP256_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_CLASSIC_MCELIECE_460896_ECDH_NISTP384_SHA512] = kex_gen_client;
@@ -283,7 +261,6 @@ ssh_init(struct ssh **sshp, int is_server, struct kex_params *kex_params)
 		ssh->kex->kex[KEX_KEM_HQC_128_ECDH_NISTP256_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_HQC_192_ECDH_NISTP384_SHA384] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_HQC_256_ECDH_NISTP521_SHA512] = kex_gen_client;
-		ssh->kex->kex[KEX_KEM_ML_KEM_512_ECDH_NISTP256_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_ML_KEM_768_ECDH_NISTP256_SHA256] = kex_gen_client;
 		ssh->kex->kex[KEX_KEM_ML_KEM_1024_ECDH_NISTP384_SHA384] = kex_gen_client;
 #endif /* OPENSSL_HAS_ECC */

@@ -24,7 +24,7 @@ else
 fi
 
 if [ "x${WITH_OPENSSL}" == "xtrue" ]; then
-    ./configure --prefix="${INSTALL_PREFIX}" --with-ldflags="-Wl,-rpath -Wl,${INSTALL_PREFIX}/lib" --with-libs=-lm --with-ssl-dir="${OPENSSL_SYS_DIR}" --with-liboqs-dir="`pwd`/oqs" --with-cflags="-Wno-implicit-function-declaration -I${INSTALL_PREFIX}/include" --sysconfdir="${INSTALL_PREFIX}"
+    ./configure --prefix="${INSTALL_PREFIX}" --with-ldflags="-Wl,-rpath -Wl,${INSTALL_PREFIX}/lib" --with-libs=-lm --with-ssl-dir="${OPENSSL_SYS_DIR}" --with-liboqs-dir="`pwd`/oqs" --with-cflags="-Wno-incompatible-pointer-types -Wno-implicit-function-declaration -I${INSTALL_PREFIX}/include" --sysconfdir="${INSTALL_PREFIX}"
 else
     ./configure --prefix="${INSTALL_PREFIX}" --with-ldflags="-Wl,-rpath -Wl,${INSTALL_PREFIX}/lib" --with-libs=-lm --without-openssl --with-liboqs-dir="`pwd`/oqs" --with-cflags="-I${INSTALL_PREFIX}/include" --sysconfdir="${INSTALL_PREFIX}"
 fi

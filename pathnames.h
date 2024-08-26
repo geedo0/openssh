@@ -73,6 +73,11 @@
 #define _PATH_SSH_PROGRAM		"/usr/bin/ssh"
 #endif
 
+/* Binary paths for the sshd components */
+#ifndef _PATH_SSHD_SESSION
+#define _PATH_SSHD_SESSION		"/usr/libexec/sshd-session"
+#endif
+
 /*
  * The process id of the daemon listening for connections is saved here to
  * make it easier to kill the correct daemon when necessary.

@@ -1,12 +1,10 @@
 #!/bin/sh
-#       $OpenBSD: sshd-log-wrapper.sh,v 1.5 2022/01/04 08:38:53 dtucker Exp $
-#       Placed in the Public Domain.
-#
-# simple wrapper for sshd proxy mode to catch stderr output
-# sh sshd-log-wrapper.sh /path/to/logfile /path/to/sshd [args...]
-
-log=$1
-shift
-
-echo "Executing: $@" >>$log
-exec "$@" -E$log
+timestamp="`/home/kk/workspace/Open-quantum-safe/OpenSSHv9/openssh/regress/timestamp`"
+logfile="/home/kk/workspace/Open-quantum-safe/OpenSSHv9/openssh/regress/log/${timestamp}.sshd.$$.log"
+rm -f /home/kk/workspace/Open-quantum-safe/OpenSSHv9/openssh/regress/sshd.log
+touch $logfile
+test -z "" || chown kk $logfile
+ln -f -s ${logfile} /home/kk/workspace/Open-quantum-safe/OpenSSHv9/openssh/regress/sshd.log
+echo "Executing: /home/kk/workspace/Open-quantum-safe/OpenSSHv9/openssh/sshd $@" log ${logfile} >>/home/kk/workspace/Open-quantum-safe/OpenSSHv9/openssh/regress/regress.log
+echo "Executing: /home/kk/workspace/Open-quantum-safe/OpenSSHv9/openssh/sshd $@" >>${logfile}
+exec /home/kk/workspace/Open-quantum-safe/OpenSSHv9/openssh/sshd -E${logfile} "$@"

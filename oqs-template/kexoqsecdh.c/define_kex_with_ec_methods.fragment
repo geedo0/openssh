@@ -1,5 +1,5 @@
 {% for kex in config['kexs'] %}
-    {%- for curve in kex['mix_with'] if not curve['x25519'] %}
+    {%- for curve in kex['mix_with'] %}
 /*---------------------------------------------------------------
  * {{ kex['name']|upper }}_ECDH_{{ curve['name']|upper }} METHODS
  *---------------------------------------------------------------

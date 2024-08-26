@@ -1,13 +1,10 @@
 {%- for kex in config['kexs'] %}
 	c->c_ssh->kex->kex[KEX_KEM_{{ kex['name']|upper }}_{{ kex['hash']|upper }}] = kex_gen_client;
-    {%- for curve in kex['mix_with'] if curve['x25519'] %}
-	c->c_ssh->kex->kex[KEX_KEM_{{ kex['name']|upper }}_{{ curve['name']|upper }}_{{ kex['hash']|upper }}] = kex_gen_client;
-    {%- endfor %}
 {%- endfor %}
 #ifdef WITH_OPENSSL
 #ifdef OPENSSL_HAS_ECC
 {%- for kex in config['kexs'] -%}
-    {%- for curve in kex['mix_with'] if not curve['x25519'] %}
+    {%- for curve in kex['mix_with'] %}
 	c->c_ssh->kex->kex[KEX_KEM_{{ kex['name']|upper }}_ECDH_{{ curve['name']|upper }}_{{ kex['hash']|upper }}] = kex_gen_client;
     {%- endfor %}
 {%- endfor %}
