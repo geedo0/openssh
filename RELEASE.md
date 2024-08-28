@@ -29,6 +29,7 @@ This is the eighth snapshot release of the OQS fork of OpenSSH.  It is based on 
   + Working interop support for `sntrup761x25519-sha512@openssh.com` key exchange.
 - Support for all ML-KEM based hybrid key exchanges in https://datatracker.ietf.org/doc/draft-kampanakis-curdle-ssh-pq-ke/
   + `mlkem768nistp256-sha256`, `mlkem1024nistp384-sha384`, `mlkem768x25519-sha256`
+  + For the `0.10.1` release of `liboqs`, these will be backed by the IPD versions of the algorithm.
 - Migrated from CircleCI to Github Actions.
 
 ---

@@ -1,5 +1,3 @@
-[![CircleCI](https://circleci.com/gh/open-quantum-safe/openssh/tree/OQS-v8.svg?style=svg)](https://circleci.com/gh/open-quantum-safe/openssh/tree/OQS-v8)
-
 OQS-OpenSSH
 ==================================
 
