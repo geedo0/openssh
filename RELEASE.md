@@ -22,7 +22,8 @@ This is the eighth snapshot release of the OQS fork of OpenSSH.  It is based on 
 
 - Updated fork to track upstream OpenSSH 9.7.
 - Update algorithm list in line with `liboqs` v0.10.1.
-  + Introduces generic support for ML-KEM, ML-DSA, SNTRUP, BIKEr4, MAYO, and Falcon (Padded).
+  + Introduces generic support for ML-KEM-IPD, ML-DSA-IPD, SNTRUP, BIKEr4, MAYO, and Falcon (Padded).
+  + Support for ML-KEM and ML-DSA is provided using a `liboqs` alias which will update from the IPD versions to the final FIPS-203 and FIPS-204 standards when they are available in the underlying `liboqs`.
 - Added support for x25519 hybrid key exchange algorithms.
   + Working interop support for `x25519-kyber-512r3-sha256-d00@amazon.com` key exchange.
   + Working interop support for `sntrup761x25519-sha512@openssh.com` key exchange.
