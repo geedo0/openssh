@@ -127,7 +127,6 @@ static int kex_kem_generic_with_x25519_enc(OQS_KEM *kem, struct kex *kex,
   }
   client_pub += kem->length_public_key;
   public_key += kem->length_ciphertext;
-  /* private_key += kem->length_shared_secret; */
 
   kexc25519_keygen(server_key, public_key);
   if ((r = kexc25519_shared_key_ext(server_key, client_pub, buf, 1)) < 0) {
